@@ -30,7 +30,7 @@ def display_quiz(ref, num=1_000_000, shuffle_questions=False, shuffle_answers=Tr
     resource_package = __name__
 
     letters = string.ascii_letters
-    div_id = ''.join(random.choice(letters) for i in range(12))
+    div_id = ''.join(random.choice(letters) for _ in range(12))
     #print(div_id)
 
     mydiv = f"""<div id="{div_id}" data-shufflequestions="{str(shuffle_questions)}"
@@ -112,9 +112,6 @@ def display_quiz(ref, num=1_000_000, shuffle_questions=False, shuffle_answers=Tr
         }}
         </script>
         """
-        javascript = script 
-
-
         print()
     else:
         script += f'''
@@ -135,7 +132,8 @@ def display_quiz(ref, num=1_000_000, shuffle_questions=False, shuffle_answers=Tr
         }}
         </script>
         '''
-        javascript = script 
+    javascript = script 
+
 
     # print(javascript)
     display(HTML(mydiv + styles + javascript))

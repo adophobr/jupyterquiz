@@ -6,8 +6,6 @@ import string
 def display_quiz_mc(question, answers, multiple=False, randomize=True,
                     question_background="#6F78FF"):
 
-    num_correct = 0
-
     question_start = '''<div id="quizWrap" style="max-width: 600px; margin: 0 auto;">
       <!-- QUESTION -->
       <div id="quizQn" style="padding: 20px;
@@ -30,22 +28,25 @@ def display_quiz_mc(question, answers, multiple=False, randomize=True,
         + question+question_end+answer_start
 
     letters = string.ascii_letters
-    feedback_id = ''.join(random.choice(letters) for i in range(12))
+    feedback_id = ''.join(random.choice(letters) for _ in range(12))
     # print(feedback_id)
 
     input_start = '''<input type="radio" name="quiz" id="quizo'''
     input_end = '''" style="display:none;" >'''
-    label_start = '''<label style="background: #fafafa;
+    label_start = (
+        '''<label style="background: #fafafa;
       border: 1px solid #eee;  border-radius: 10px; padding: 10px;
       font-size: 16px; cursor: pointer; text-align: center;" 
       onclick="check'''
-    label_start += feedback_id
+        + feedback_id
+    )
     label_start += '''()" 
       id="quizo'''
     label_end = '''  </label>'''
 
     if randomize:
         random.shuffle(answers)
+    num_correct = 0
     for i, answer in enumerate(answers):
         #quiz_html+=input_start+str(i)+ '" data-correct="' +str(answer["correct"]) \
         quiz_html += input_start+str(i) + input_end
@@ -61,13 +62,15 @@ def display_quiz_mc(question, answers, multiple=False, randomize=True,
 
     quiz_html += feedback_id
     quiz_html += '''" style="font-size: 20px;text-align:center;padding-bottom: 30px" data-answeredcorrect=0 data-numcorrect='''
-    quiz_html += str(num_correct) + '''></div>'''
+    quiz_html += f'''{str(num_correct)}></div>'''
 
-    javascript = """
+    javascript = (
+        """
         <script type="text/Javascript">
 
         function check"""
-    javascript += feedback_id
+        + feedback_id
+    )
     if multiple:
         javascript += """(){
 
@@ -79,7 +82,7 @@ def display_quiz_mc(question, answers, multiple=False, randomize=True,
                 console.log(answers);
 
                 var feedback = document.getElementById("""
-        javascript += '"'+feedback_id+'"'
+        javascript += f'"{feedback_id}"'
         javascript += """);
                 reset = false;
                 if (event.srcElement.dataset.correct=="True" )   {
@@ -152,7 +155,7 @@ def display_quiz_mc(question, answers, multiple=False, randomize=True,
                     child.style.background="#fafafa";
                 }
                 var feedback = document.getElementById("""
-        javascript += '"'+feedback_id+'"'
+        javascript += f'"{feedback_id}"'
         javascript += """);
                 feedback.innerHTML=event.srcElement.dataset.feedback;
                 if (event.srcElement.dataset.correct=="True")   {
